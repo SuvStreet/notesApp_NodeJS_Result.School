@@ -26,11 +26,15 @@ async function getNotes() {
   return Array.isArray(JSON.parse(notes)) ? JSON.parse(notes) : []
 }
 
+async function saveNotes(notes) {
+  await fs.writeFile(notesPath, JSON.stringify(notes))
+}
+
 async function printNotes() {
   const notes = await getNotes()
 
   console.log(chalk.bgBlue('Ваши заметки:'))
-  notes.forEach(({id, title}) => {
+  notes.forEach(({ id, title }) => {
     console.log('id:', chalk.yellow(id), 'title:', chalk.blue(title))
   })
 }
@@ -39,12 +43,26 @@ async function removeNote(id) {
   const notes = await getNotes()
 
   const newNotesList = notes.filter((note) => note.id !== id)
-  await fs.writeFile(notesPath, JSON.stringify(newNotesList))
+  await saveNotes(newNotesList)
   console.log(chalk.red(`Заметка под номером ${id} была удалена!`))
+}
+
+async function editNote(id, title) {
+  const notes = await getNotes()
+
+  const newNotesList = notes.map((note) => {
+    if (note.id === id) {
+      note.title = title
+    }
+    return note
+  })
+
+  await saveNotes(newNotesList)
 }
 
 module.exports = {
   addNote,
-  printNotes,
+  getNotes,
   removeNote,
+  editNote,
 }
