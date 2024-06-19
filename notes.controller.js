@@ -44,7 +44,7 @@ async function removeNote(id) {
 
   const newNotesList = notes.filter((note) => note.id !== id)
   await saveNotes(newNotesList)
-  console.log(chalk.red(`Заметка под номером ${id} была удалена!`))
+  console.log(chalk.bgRed(`Заметка под номером ${id} была успешно удалена!`))
 }
 
 async function editNote(id, title) {
@@ -58,6 +58,7 @@ async function editNote(id, title) {
   })
 
   await saveNotes(newNotesList)
+  console.log(chalk.bgBlue(`Заметка под номером ${id} была успешно изменена!`))
 }
 
 module.exports = {
