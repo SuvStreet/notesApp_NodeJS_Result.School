@@ -40,11 +40,20 @@ async function removeNote(id) {
 
   const newNotesList = notes.filter((note) => note.id !== id)
   await fs.writeFile(notesPath, JSON.stringify(newNotesList))
-  console.log(chalk.red(`Заметка под номером ${id} была удалена!`))
+  console.log(chalk.bgRed(`Заметка под номером ${id} была удалена!`))
+}
+
+async function editNote(id, title) {
+  const notes = await getNotes()
+  const note = notes.find((note) => note.id === id)
+  note.title = title
+  await fs.writeFile(notesPath, JSON.stringify(notes))
+  console.log(chalk.bgYellow(`Заметка под номером ${id} была изменена!`))
 }
 
 module.exports = {
   addNote,
   printNotes,
   removeNote,
+  editNote,
 }
