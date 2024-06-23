@@ -1,6 +1,8 @@
 const express = require('express')
 const chalk = require('chalk')
 const path = require('path')
+const mongoose = require('mongoose')
+
 const {
   addNote,
   getNotes,
@@ -24,17 +26,29 @@ app.get('/', async (req, res) => {
     title: 'Express App',
     notes: await getNotes(),
     created: false,
+    error: false,
   })
 })
 
 app.post('/', async (req, res) => {
-  await addNote(req.body.title)
+  try {
+    await addNote(req.body.title)
 
-  res.render('index', {
-    title: 'Express App',
-    notes: await getNotes(),
-    created: true,
-  })
+    res.render('index', {
+      title: 'Express App',
+      notes: await getNotes(),
+      created: true,
+      error: false,
+    })
+  } catch (error) {
+    console.log(error)
+    res.render('index', {
+      title: 'Express App',
+      notes: await getNotes(),
+      created: false,
+      error: true,
+    })
+  }
 })
 
 app.delete('/:id', async (req, res) => {
@@ -44,19 +58,27 @@ app.delete('/:id', async (req, res) => {
     title: 'Express App',
     notes: await getNotes(),
     created: false,
+    error: false,
   })
 })
 
 app.put('/:id', async (req, res) => {
-  await editNote(req.params.id, req.body.title)
+  await editNote({id: req.params.id, title: req.body.title})
 
   res.render('index', {
     title: 'Express App',
     notes: await getNotes(),
     created: false,
+    error: false,
   })
 })
 
-app.listen(port, () => {
-  console.log(chalk.green(`Server is running on port ${port}...`))
-})
+mongoose
+  .connect(
+    'mongodb+srv://admin:admin@notes-todo.rp1fmtk.mongodb.net/notes-todo?retryWrites=true&w=majority&appName=Notes-todo'
+  )
+  .then(() => {
+    app.listen(port, () => {
+      console.log(chalk.green(`Server is running on port ${port}...`))
+    })
+  })
