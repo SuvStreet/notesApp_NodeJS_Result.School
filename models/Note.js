@@ -3,8 +3,12 @@ const mongoose = require('mongoose')
 const NotesSchema = mongoose.Schema({
   title: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
+  owner: {
+    type: String,
+    required: true,
+  },
 })
 
 const Note = mongoose.model('Note', NotesSchema)

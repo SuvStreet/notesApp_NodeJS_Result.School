@@ -53,7 +53,6 @@ function handleRemoveOrCancel(id, clickedBtn, titleNoteElem) {
 function handleEditOrSave(
   id,
   clickedBtn,
-  btnSaveElem,
   titleNoteElem,
   btnRemoveCancelElem
 ) {
