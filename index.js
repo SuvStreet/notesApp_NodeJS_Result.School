@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express')
 const chalk = require('chalk')
 const path = require('path')
@@ -159,7 +161,7 @@ app.put('/:id', async (req, res) => {
 
 mongoose
   .connect(
-    'mongodb+srv://admin:admin@notes-todo.rp1fmtk.mongodb.net/notes-todo?retryWrites=true&w=majority&appName=Notes-todo'
+    process.env.MONGODB_CONNECTION_STRING || ''
   )
   .then(() => {
     app.listen(port, () => {
